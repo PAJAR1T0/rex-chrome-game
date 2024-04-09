@@ -16,6 +16,13 @@ let canvasWidth = 70;
 let points = 0;
 let drawPoints = 0;
 let historicalPoints = '0000';
+let jump = false;
+let dinoY = 140;
+let dinoActualY = dinoY;
+let dinoHeightJump = 90;
+let dinoMaxHeight = dinoY - dinoHeightJump;
+let dinoJumpVelocity = 13;
+
 
 canvas.style.width = `${canvasWidth}px`;
 canvas.style.height = '150px';
@@ -67,8 +74,30 @@ const drawGround = ({h,w,x,y}) => {
     }
 };
 
+
+const jumpLogic = () => {
+    
+    if (jump) {
+        if (dinoMaxHeight < dinoActualY - 1) {
+            dinoJumpVelocity -= dinoJumpVelocity * .11;
+            return dinoActualY -= dinoJumpVelocity
+        }
+        jump = false;
+        dinoJumpVelocity = 0.8;
+        return;
+    }
+
+    if ( dinoActualY < dinoY - 6 ) {
+        dinoJumpVelocity += dinoJumpVelocity * .13;
+        (dinoY > dinoActualY ) ? dinoActualY += dinoJumpVelocity : dinoY;
+        return;
+    }
+    dinoActualY = dinoY
+    dinoJumpVelocity = 13;
+};
+
 const drawDinosaur = ({h,w,x,y}) => {
-    ctx.drawImage(dino, x, y, w, h, 20, 140 - h / 2, w / 2, h / 2);
+    ctx.drawImage(dino, x, y, w, h, 20, dinoActualY - h / 2, w / 2, h / 2);
 }
 
 const dinosaurInterval = () => {
@@ -96,12 +125,20 @@ const drawHistoricalPoints = () => {
     ctx.fillText(historicalPoints, 470, + 25);
 };
 
+const drawDinosaurLogic = () => {
+    if (!jump) {
+        return dinoPosture = (duck) ? `dinoDuck${dinoDrawLeg}` : `dino${dinoDrawLeg}`;
+    }
+    dinoPosture = 'dino'
+}
+
 const gameFrames = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    dinoPosture = (duck) ? `dinoDuck${dinoDrawLeg}` : `dino${dinoDrawLeg}`;
     drawGround(sprites.ground);
-    drawDinosaur(sprites[dinoPosture]);
+    jumpLogic();
+    drawDinosaurLogic();
     drawCloud(sprites.cloud);
+    drawDinosaur(sprites[dinoPosture]);
     drawActualPoints();
     drawHistoricalPoints();
 
@@ -123,9 +160,10 @@ const eventListeners = () => {
         if (event.key === 'ArrowUp') {
             if ( !gameStarted ) {
                 gameStarted = true;
-                start();
+                return start();
             }
-            // TODO: HACER LA FUNCION DE SALTO
+
+            jump = true;
         }
         if (event.key === 'ArrowDown') {
             if (duck) return;
