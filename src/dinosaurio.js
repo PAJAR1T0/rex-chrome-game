@@ -22,6 +22,7 @@ let dinoActualY = dinoY;
 let dinoHeightJump = 90;
 let dinoMaxHeight = dinoY - dinoHeightJump;
 let dinoJumpVelocity = 13;
+let isUpping = true;
 
 
 canvas.style.width = `${canvasWidth}px`;
@@ -78,22 +79,26 @@ const drawGround = ({h,w,x,y}) => {
 const jumpLogic = () => {
     
     if (jump) {
-        if (dinoMaxHeight < dinoActualY - 1) {
-            dinoJumpVelocity -= dinoJumpVelocity * .11;
-            return dinoActualY -= dinoJumpVelocity
+        if (isUpping) {
+            if (dinoMaxHeight < dinoActualY - 1) {
+                dinoJumpVelocity -= dinoJumpVelocity * .11;
+                return dinoActualY -= dinoJumpVelocity
+            }
+            isUpping = false;
         }
-        jump = false;
-        dinoJumpVelocity = 0.8;
-        return;
-    }
+        
+        
+    
 
-    if ( dinoActualY < dinoY - 6 ) {
-        dinoJumpVelocity += dinoJumpVelocity * .13;
-        (dinoY > dinoActualY ) ? dinoActualY += dinoJumpVelocity : dinoY;
-        return;
-    }
-    dinoActualY = dinoY
-    dinoJumpVelocity = 13;
+        if ( dinoActualY < dinoY - 6 ) {
+            dinoJumpVelocity += dinoJumpVelocity * .13;
+            (dinoY > dinoActualY ) ? dinoActualY += dinoJumpVelocity : dinoY;
+            return;
+        }
+        dinoActualY = dinoY
+        dinoJumpVelocity = 13;
+        jump = false;
+    };
 };
 
 const drawDinosaur = ({h,w,x,y}) => {
@@ -162,8 +167,10 @@ const eventListeners = () => {
                 gameStarted = true;
                 return start();
             }
+            if (jump) return;
 
             jump = true;
+            isUpping = true;
         }
         if (event.key === 'ArrowDown') {
             if (duck) return;
