@@ -4,11 +4,12 @@ const canvas = document.createElement('canvas');
 
 const scale = window.devicePixelRatio;
 
-let dino;
+let sprite;
 let duck = false;
 let groundx = 0;
 let clouds = {x1: 800, x2: 500};
-let groundVelocity = 7;
+let initialVelocity = 7;
+let groundVelocity = initialVelocity;
 let dinoDrawLeg = 'RightLeg';
 let dinoPosture = `dino${dinoDrawLeg}`;
 let gameStarted = false;
@@ -23,7 +24,17 @@ let dinoHeightJump = 90;
 let dinoMaxHeight = dinoY - dinoHeightJump;
 let dinoJumpVelocity = 13;
 let isUpping = true;
+let obstacleType;
+let obstacle;
+let obstacleInitialX;
+let obstacleActualX;
+const obstacles = ['cactus', 'bird']
+const cactusTypes = ['cactus', 'cactusDouble', 'cactusDoubleB', 'cactusTriple'];
+let isDrawingObstacle = false;
+let birdPosition = 'birdDown';
 
+// 700 - 2.5 
+//     - 1
 
 canvas.style.width = `${canvasWidth}px`;
 canvas.style.height = '150px';
@@ -39,12 +50,18 @@ const loadImage = async() => {
     const image = new Image();
     image.src = '../assets/sprite.png';
     await image.decode()
-    dino = image;
+    sprite = image;
 };
 
 
 
 const sprites = {
+    birdUp: { h: 52, w: 84, x: 708, y: 31 },
+    birdDown: { h: 60, w: 84, x: 708, y: 85 },
+    cactus: { h: 92, w: 46, x: 70, y: 31 },
+    cactusDouble: { h: 66, w: 64, x: 118, y: 31 },
+    cactusDoubleB: { h: 92, w: 80, x: 184, y: 31 },
+    cactusTriple: { h: 66, w: 82, x: 266, y: 31 },
     dino: { h: 86, w: 80, x: 350, y: 31 },
     dinoLeftLeg: { h: 86, w: 80, x: 432, y: 31 },
     dinoRightLeg: { h: 86, w: 80, x: 514, y: 31 },
@@ -52,23 +69,25 @@ const sprites = {
     dinoDuckRightLeg: { h: 52, w: 110, x: 596, y: 85 },
     ground: { h: 28, w: 2400, x: 0, y: 2 },
     cloud: { h: 28, w: 92, x: 794, y: 31 },
+    replayIcon: { h: 60, w: 68, x: 0, y: 31 },
 }
+
 
 const drawCloud = ({h,w,x,y}) => {
     clouds.x1 -= groundVelocity / 3;
     clouds.x2 -= groundVelocity / 3;
-    ctx.drawImage(dino, x, y, w, h, clouds.x1, 20, w, h);
-    ctx.drawImage(dino, x, y, w, h, clouds.x2, 70, w *.7, h*.7);
+    ctx.drawImage(sprite, x, y, w, h, clouds.x1, 20, w, h);
+    ctx.drawImage(sprite, x, y, w, h, clouds.x2, 70, w *.7, h*.7);
     if (clouds.x1 <= -100) clouds.x1 = 600;
     if (clouds.x2 <= -100) clouds.x2 = 600;
 };
 
 const drawGround = ({h,w,x,y}) => {
     groundx += groundVelocity;
-    ctx.drawImage(dino, groundx, y, w, h, 0, 123, w, h);
+    ctx.drawImage(sprite, groundx, y, w, h, 0, 123, w, h);
 
     if (groundx > w - 600) {
-        ctx.drawImage(dino, 0, y, w, h, w - groundx, 123, w, h);
+        ctx.drawImage(sprite, 0, y, w, h, w - groundx, 123, w, h);
         if ( groundx >= w) {
             groundx = 0;
         }
@@ -86,9 +105,6 @@ const jumpLogic = () => {
             }
             isUpping = false;
         }
-        
-        
-    
 
         if ( dinoActualY < dinoY - 6 ) {
             dinoJumpVelocity += dinoJumpVelocity * .13;
@@ -101,27 +117,25 @@ const jumpLogic = () => {
     };
 };
 
-const drawDinosaur = ({h,w,x,y}) => {
-    ctx.drawImage(dino, x, y, w, h, 20, dinoActualY - h / 2, w / 2, h / 2);
-}
 
 const dinosaurInterval = () => {
     setInterval(() => {
-            dinoDrawLeg = dinoDrawLeg === 'RightLeg' ? 'LeftLeg' : 'RightLeg';
-        }, 1000/10);
-    }
+        dinoDrawLeg = dinoDrawLeg === 'RightLeg' ? 'LeftLeg' : 'RightLeg';
+    }, 1000/10);
+}
 
 const managePoints = () => {
     setTimeout(() => {
         points++;
+        if ( points % 70 === 0 && groundVelocity < 2.5 * groundVelocity ) groundVelocity += initialVelocity * .125;
         managePoints();
     }, 75);
 }
 
 const drawActualPoints = () => {
     drawPoints = (points.toString().length === 1) ? `000${points}` : 
-                 (points.toString().length === 2) ? `00${points}` :
-                 (points.toString().length === 3) ? `0${points}` : points;
+    (points.toString().length === 2) ? `00${points}` :
+    (points.toString().length === 3) ? `0${points}` : points;
     ctx.fillText(drawPoints, 540, + 25);
 };
 
@@ -130,6 +144,10 @@ const drawHistoricalPoints = () => {
     ctx.fillText(historicalPoints, 470, + 25);
 };
 
+const drawDinosaur = ({h,w,x,y}) => {
+    ctx.drawImage(sprite, x, y, w, h, 20, dinoActualY - h / 2, w / 2, h / 2);
+}
+
 const drawDinosaurLogic = () => {
     if (!jump) {
         return dinoPosture = (duck) ? `dinoDuck${dinoDrawLeg}` : `dino${dinoDrawLeg}`;
@@ -137,12 +155,56 @@ const drawDinosaurLogic = () => {
     dinoPosture = 'dino'
 }
 
+const obstacleLogic = () => {
+    if (!isDrawingObstacle) {
+        let obstacleChoose;
+        obstacleChoose = ( points > 100) ? obstacles[Math.floor(Math.random() * obstacles.length)] : 'cactus';
+        if (obstacleChoose === 'cactus') return drawCactusLogic();
+        isDrawingObstacle = true;
+        return drawBirdLogic();
+    }
+
+    if ( obstacleActualX > -90 ) {
+        drawObstacle(obstacle, obstacleType);
+        return obstacleActualX -= groundVelocity;
+    }
+
+    isDrawingObstacle = false;
+    obstacleInitialX = 600 + (Math.floor(Math.random() * 100));
+    obstacleActualX = obstacleInitialX;
+}
+
+const drawCactusLogic = () => {
+    isDrawingObstacle = true;
+    obstacleType = cactusTypes[Math.floor(Math.random() * cactusTypes.length)];
+    obstacle = sprites[obstacleType];
+}
+
+const drawBirdLogic = () => {
+    setTimeout(()=>{
+    birdPosition = (birdPosition === 'birdDown') ? 'birdUp' : 'birdDown' ;
+    obstacle = sprites[birdPosition];
+
+    if (isDrawingObstacle) drawBirdLogic();
+    }, 700);
+}
+
+const drawObstacle = ({h,w,x,y}, type) => {
+    const drawY = (type === 'cactus' || type === 'cactusDoubleB') ?  161 - h : 155 - h;
+    ctx.drawImage(sprite, x, y, w, h, obstacleActualX, drawY, w  * .8 , h *.8 );
+
+//      -> 166
+//    1 -> 140
+}
+
+
 const gameFrames = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawGround(sprites.ground);
     jumpLogic();
     drawDinosaurLogic();
     drawCloud(sprites.cloud);
+    obstacleLogic();
     drawDinosaur(sprites[dinoPosture]);
     drawActualPoints();
     drawHistoricalPoints();
