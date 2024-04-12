@@ -1,6 +1,6 @@
 import { configValues,
          start, jump,
-         dinoActualY} from "./index";
+         dinoActualY, isJumping} from "./index";
 
 let gameStarted = false;
 export let duck = false;
@@ -12,9 +12,7 @@ export const eventListeners = () => {
                 gameStarted = true;
                 return start();
             }
-            if ( configValues.dinoY > dinoActualY) return;
-            console.log('jump');
-            jump();
+            jump()
         }
         if (event.key === 'ArrowDown') {
             if (duck) return;
@@ -23,7 +21,7 @@ export const eventListeners = () => {
     });
     window.addEventListener('keyup', (event) => {
         if (event.key === 'ArrowUp') {
-            console.log('up');
+            
         }
         if (event.key === 'ArrowDown') {
             duck = false;

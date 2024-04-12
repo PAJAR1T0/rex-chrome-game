@@ -2,7 +2,7 @@ import { sprites } from '../env/sprites';
 import {ctx, canvas, drawCloud, drawGround, obstacleLogic, 
         drawActualPoints, drawHistoricalPoints, expandCanvas, 
         managePoints, drawDinosaur,
-        dinosaurInterval, dinosaurPosture, jumpLogic} from './index';
+        dinosaurInterval, dinosaurPosture, jumpLogic, birdPosture, jump} from './index';
 
 
 const gameFrames = () => {
@@ -10,9 +10,9 @@ const gameFrames = () => {
     drawGround(sprites.ground);
     drawCloud(sprites.cloud);
     obstacleLogic();
+    jumpLogic();
     const dinoPosture = dinosaurPosture();
     const sprite = sprites[dinoPosture];
-    jumpLogic();
     drawDinosaur(sprite);
     drawActualPoints();
     drawHistoricalPoints();
@@ -22,6 +22,8 @@ const gameFrames = () => {
 export const start = () => {
     requestAnimationFrame(gameFrames);
     dinosaurInterval();
+    jump()
+    birdPosture()
     expandCanvas();
     managePoints();
 }

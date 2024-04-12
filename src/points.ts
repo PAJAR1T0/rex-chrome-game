@@ -9,7 +9,7 @@ let drawPoints: string;
 export const managePoints = () => {
     setTimeout(() => {
         points++;
-        if ( points % 70 === 0 && groundVelocity < 2.5 * groundVelocity ) groundVelocity += configValues.initialVelocity * .125;
+        if ( points % 70 === 0 && groundVelocity < 1.5 * configValues.initialVelocity ) groundVelocity += configValues.initialVelocity * .125;
         managePoints();
     }, 75);
 }
