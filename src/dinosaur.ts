@@ -1,4 +1,4 @@
-import { ctx, sprite, dinoActualY, configValues, duck } from './index';
+import { ctx, sprite, dinoActualY, configValues, duck, sprites } from './index';
 
 let dinoDrawLeg = 'RightLeg';
 export let dinoPosture = `dino${dinoDrawLeg}`;
@@ -11,7 +11,7 @@ export const dinosaurInterval = () => {
 
 
 export const drawDinosaur = ({h,w,x,y}: {h: number, w: number, x: number, y: number}) => {
-    ctx.drawImage(sprite, x, y, w, h, 20, dinoActualY - h / 2, w / 2, h / 2);
+    ctx.drawImage(sprite, x, y, w, h, configValues.dinoX, dinoActualY - h / 2, w / 2, h / 2);
 }
 
 export const dinosaurPosture = () => {

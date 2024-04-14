@@ -5,7 +5,7 @@ import { loadImage, createPage, eventListeners, drawDinosaur, sprites, drawGroun
     let sprite: HTMLImageElement;
     const main = async() => {
         await loadImage();
-        createPage();
+        await createPage();
         eventListeners();
         drawGround(sprites.ground);
         drawDinosaur(sprites.dino);

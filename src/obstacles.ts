@@ -1,11 +1,18 @@
-import { configValues, points, groundVelocity, sprites, sprite, ctx } from "./index";
+import { configValues, points, groundVelocity, sprites, sprite, ctx, checkColition } from "./index";
 
 let birdLastType: any;
 let lastObstacle: any;
 let obstacleInitialX: any;
 
-let obstacles = [{type: 'cactus', x: 0, y: 0, w: 0, h: 0, initialX: 1000, obstacleActualX: 0, drawY : 0, obstacleHeight: 0, obstacleWidth: 0, isDrawingObstacle: false, isDrawingBird: false, baseY: 0},
+let initialObstacles = [{type: 'cactus', x: 0, y: 0, w: 0, h: 0, initialX: 1000, obstacleActualX: 0, drawY : 0, obstacleHeight: 0, obstacleWidth: 0, isDrawingObstacle: false, isDrawingBird: false, baseY: 0},
                  {type: 'cactus', x: 0, y: 0, w: 0, h: 0, initialX: 700, obstacleActualX: 0, drawY : 0, obstacleHeight: 0, obstacleWidth: 0, isDrawingObstacle: false, isDrawingBird: false, baseY: 0}]
+
+let obstacles = structuredClone(initialObstacles);
+
+export const resetObstacles = () => {
+    obstacles = structuredClone(initialObstacles);
+    obstacleInitialX = null;
+}
 
 const obstaclesLogic = (index: number) => {
     if (obstacles[index].isDrawingObstacle === false) {
@@ -18,6 +25,8 @@ const obstaclesLogic = (index: number) => {
         return;
     }
     
+    checkColition(obstacles[index]);
+
     if ( obstacles[index].obstacleActualX > -90 ) {
         drawObstacle(obstacles[index]);
         obstacles[index].obstacleActualX -= groundVelocity;

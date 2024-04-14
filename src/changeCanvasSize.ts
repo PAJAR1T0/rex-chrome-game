@@ -1,12 +1,12 @@
 import { configValues, ctx, canvas, scale } from "./index";
 
+let canvasWidth = configValues.canvasInitialWidth;
+
 export const expandCanvas = () => {
     setTimeout(() => { 
-        configValues.canvasWidth += 4;
-        updateCanvasSize(configValues.canvasWidth);
-        ctx.font = '25px Pixelify Sans';
-        ctx.fillStyle = 'gray';  
-        if (configValues.canvasWidth < 600) expandCanvas();
+        canvasWidth += 4;
+        updateCanvasSize(canvasWidth);
+        if (canvasWidth < configValues.canvasMaxWidth) expandCanvas();
     }, 1);
 }
 
