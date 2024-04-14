@@ -1,8 +1,7 @@
 import './assets/style.css'
-import { createPage, eventListeners, drawDinosaur, sprites, drawGround, loadAssets } from './src/index.ts'
+import { createPage, eventListeners, drawDinosaur, sprites, drawGround, loadAssets } from './src/index'
 
 (async() => {
-    let sprite: HTMLImageElement;
     const main = async() => {
         await loadAssets();
         await createPage();
