@@ -1,4 +1,4 @@
-import { ctx, sprite, dinoActualY, configValues, duck, sprites } from './index';
+import { ctx, sprite, dinoActualY, configValues, duck } from './index';
 
 let dinoDrawLeg = 'RightLeg';
 export let dinoPosture = `dino${dinoDrawLeg}`;

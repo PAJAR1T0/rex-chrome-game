@@ -32,7 +32,7 @@ export const eventListeners = () => {
 };
 
 export const newGameButton = (buttonX: number, buttonY: number, buttonWidth: number, buttonHeight: number) => {
-    canvas.addEventListener('click', (event) => {
+    canvas.addEventListener('click', (event: MouseEvent) => {
         let x = event.clientX - chorsCanvas.x;
         let y = event.clientY - chorsCanvas.y;
         if ( x > buttonX && x < buttonX + buttonWidth && y > buttonY && y < buttonY + buttonHeight && gameOver) {
