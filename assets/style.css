@@ -3,6 +3,16 @@ body {
   padding: 0;
 }
 
+a {
+  text-decoration: none;
+  color: gray;
+}
+
+a:hover {
+  color: rgba(225,3,129, 1);
+  filter: drop-shadow(0 0 10px rgba(55,146,194, 1));
+}
+
 #game{
   display: flex;
   flex-direction: column;
