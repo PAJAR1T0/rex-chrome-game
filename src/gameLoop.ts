@@ -4,7 +4,8 @@ import {ctx, canvas, drawCloud, drawGround, obstacleLogic,
         dinosaurInterval, dinosaurPosture, jumpLogic, birdPosture, jump, setGameOver, gameOver,
         resetObstacles,
         resetGroundVelocity, sprites,
-        loadHistoricalPoints} from './index';
+        loadHistoricalPoints,
+        activeShadows} from './index';
 
 
 const gameFrames = () => {
@@ -32,6 +33,7 @@ export const newGame = () => {
 }
 
 export const start = () => {
+    activeShadows();
     requestAnimationFrame(gameFrames);
     dinosaurInterval();
     jump()

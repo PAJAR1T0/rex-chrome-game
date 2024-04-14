@@ -1,4 +1,4 @@
-import { start, jump, gameOver, setGameOver, newGame, canvas, chorsCanvas } from "./index";
+import { start, jump, gameOver, setGameOver, newGame, canvas, chorsCanvas, jumpSound } from "./index";
 
 let gameStarted = false;
 export let duck = false;
@@ -16,6 +16,7 @@ export const eventListeners = () => {
                 return start();
             }
             jump()
+            jumpSound.play();
         }
         if (event.key === 'ArrowDown') {
             if (duck) return;
@@ -23,9 +24,6 @@ export const eventListeners = () => {
         }
     });
     window.addEventListener('keyup', (event) => {
-        if (event.key === 'ArrowUp') {
-
-        }
         if (event.key === 'ArrowDown') {
             duck = false;
         }

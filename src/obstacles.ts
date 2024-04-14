@@ -44,10 +44,10 @@ export const obstacleLogic = () => {
 }
 
 const setObstacle = (index: number) => {
-    let obstacleChoose = ( points > 300) ? configValues.obstacles[(Math.floor(Math.random() * configValues.obstacles.length))] : 'cactus';
+    let obstacleChoose = ( points > 200) ? configValues.obstacles[(Math.floor(Math.random() * configValues.obstacles.length))] : 'cactus';
     obstacleChoose = (lastObstacle === 'bird' ) ? 'cactus' : obstacleChoose;
     lastObstacle = obstacleChoose;
-    obstacles[index].type = obstacleChoose;
+
     return (obstacleChoose === 'cactus') ? drawCactusLogic(index) : BirdLogic(index);
 }
 
@@ -55,6 +55,7 @@ const drawCactusLogic = (index: number) => {
     let cactusType = configValues.cactusTypes[Math.floor(Math.random() * configValues.cactusTypes.length)];
     let obstacle = sprites[cactusType];
     let type = cactusType;
+    obstacles[index].type = type;
     setObstacleChors(index, obstacle, type);
     obstacles[index].drawY = (cactusType === 'cactus' || cactusType === 'cactusDoubleB') ?  161 - obstacle.h : 155 - obstacle.h;
 }
@@ -80,6 +81,7 @@ const drawBirdLogic = (index: number) => {
     birdLastType = (birdLastType === 'birdDown') ? 'birdUp' : 'birdDown';
     let obstacle = sprites[birdLastType];
     let type = birdLastType;
+    obstacles[index].type = type;
     setObstacleChors(index, obstacle, type);
     obstacles[index].drawY = (birdLastType === 'birdUp') ?  obstacles[index].baseY : obstacles[index].baseY + 10;
 }
