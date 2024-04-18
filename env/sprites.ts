@@ -1,4 +1,4 @@
-export const sprites: any = {
+export const sprites: { [sprite : string] : { h: number, w: number, x: number, y: number } } = {
     birdUp: { h: 52, w: 84, x: 708, y: 31 },
     birdDown: { h: 60, w: 84, x: 708, y: 85 },
     cactus: { h: 92, w: 46, x: 70, y: 31 },

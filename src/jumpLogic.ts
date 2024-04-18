@@ -4,8 +4,8 @@ export let dinoActualY: number = configValues.dinoY;
 let dinoJumpVelocity: number = 13;
 const dinoHeightJump: number = 90;
 const dinoMaxHeight: number = configValues.dinoY - dinoHeightJump;
-export let isJumping = false;
-let isUpping = false
+export let isJumping: boolean = false;
+let isUpping: boolean = false
 
 
 const upping = (): void =>  {

@@ -1,13 +1,15 @@
-import { configValues, points, groundVelocity, sprites, sprite, ctx, checkColition } from "./index";
+import { configValues, points, groundVelocity, sprites, sprite, ctx, checkColition, obstacleInterface, spriteInterface } from "./index";
 
-let birdLastType: any;
-let lastObstacle: any;
-let obstacleInitialX: any;
+let birdLastType: string;
+let lastObstacle: string;
+let obstacleInitialX: number|null;
 
-let initialObstacles = [{type: 'cactus', x: 0, y: 0, w: 0, h: 0, initialX: 1000, obstacleActualX: 0, drawY : 0, obstacleHeight: 0, obstacleWidth: 0, isDrawingObstacle: false, isDrawingBird: false, baseY: 0},
-                 {type: 'cactus', x: 0, y: 0, w: 0, h: 0, initialX: 700, obstacleActualX: 0, drawY : 0, obstacleHeight: 0, obstacleWidth: 0, isDrawingObstacle: false, isDrawingBird: false, baseY: 0}]
+let initialObstacles: obstacleInterface[] = [
+    {type: 'cactus', x: 0, y: 0, w: 0, h: 0, initialX: 1000, obstacleActualX: 0, drawY : 0, obstacleHeight: 0, obstacleWidth: 0, isDrawingObstacle: false, isDrawingBird: false, baseY: 0},
+    {type: 'cactus', x: 0, y: 0, w: 0, h: 0, initialX: 700, obstacleActualX: 0, drawY : 0, obstacleHeight: 0, obstacleWidth: 0, isDrawingObstacle: false, isDrawingBird: false, baseY: 0},
+]
 
-let obstacles = structuredClone(initialObstacles);
+let obstacles: obstacleInterface[] = structuredClone(initialObstacles);
 
 export const resetObstacles = () => {
     obstacles = structuredClone(initialObstacles);
@@ -44,7 +46,7 @@ export const obstacleLogic = () => {
 }
 
 const setObstacle = (index: number) => {
-    let obstacleChoose = ( points > 200) ? configValues.obstacles[(Math.floor(Math.random() * configValues.obstacles.length))] : 'cactus';
+    let obstacleChoose: string = ( points > 200) ? configValues.obstacles[(Math.floor(Math.random() * configValues.obstacles.length))] : 'cactus';
     obstacleChoose = (lastObstacle === 'bird' ) ? 'cactus' : obstacleChoose;
     lastObstacle = obstacleChoose;
 
@@ -52,37 +54,35 @@ const setObstacle = (index: number) => {
 }
 
 const drawCactusLogic = (index: number) => {
-    let cactusType = configValues.cactusTypes[Math.floor(Math.random() * configValues.cactusTypes.length)];
-    let obstacle = sprites[cactusType];
-    let type = cactusType;
-    obstacles[index].type = type;
-    setObstacleChors(index, obstacle, type);
+    let cactusType: string = configValues.cactusTypes[Math.floor(Math.random() * configValues.cactusTypes.length)];
+    let obstacle: spriteInterface = sprites[cactusType];
+    obstacles[index].type = cactusType;
+    setObstacleChors(index, obstacle, cactusType);
     obstacles[index].drawY = (cactusType === 'cactus' || cactusType === 'cactusDoubleB') ?  161 - obstacle.h : 155 - obstacle.h;
 }
 
-const setObstacleChors = (index: number, obstacle: {w: number, h: number, x: number, y: number}, type: string) => {
+const setObstacleChors = (index: number, obstacle: spriteInterface, type: string) => {
     obstacles[index].w = obstacle.w;
     obstacles[index].h = obstacle.h;
     obstacles[index].x = obstacle.x;
     obstacles[index].y = obstacle.y;
-    let multiply = (type === 'birdDown' || type === 'birdUp') ? .5 : .8;
+    let multiply: number = (type === 'birdDown' || type === 'birdUp') ? .5 : .8;
     obstacles[index].obstacleHeight = obstacle.h * multiply;
     obstacles[index].obstacleWidth = obstacle.w * multiply;
 }
 
 const BirdLogic = (index: number) => {
     obstacles[index].isDrawingBird = true;
-    let birdType = Math.floor(Math.random() * 2);
+    let birdType: number = Math.floor(Math.random() * 2);
     obstacles[index].baseY = (birdType === 0) ? 70 : 90;
     drawBirdLogic(index);
 }
 
 const drawBirdLogic = (index: number) => {
     birdLastType = (birdLastType === 'birdDown') ? 'birdUp' : 'birdDown';
-    let obstacle = sprites[birdLastType];
-    let type = birdLastType;
-    obstacles[index].type = type;
-    setObstacleChors(index, obstacle, type);
+    let obstacle: spriteInterface = sprites[birdLastType];
+    obstacles[index].type = birdLastType;
+    setObstacleChors(index, obstacle, birdLastType);
     obstacles[index].drawY = (birdLastType === 'birdUp') ?  obstacles[index].baseY : obstacles[index].baseY + 10;
 }
 
@@ -96,6 +96,6 @@ export const birdPosture = () => {
     }, 150);
 }
 
-const drawObstacle = ({x, y, w, h, obstacleActualX, drawY, obstacleHeight, obstacleWidth}: {h: number, w: number, x: number, y: number, obstacleActualX: number, drawY: number, obstacleHeight: number, obstacleWidth: number}) => {
+const drawObstacle = ({x, y, w, h, obstacleActualX, drawY, obstacleHeight, obstacleWidth}: spriteInterface & {obstacleActualX: number, drawY: number, obstacleHeight: number, obstacleWidth: number}) => {
     ctx.drawImage(sprite, x, y, w, h, obstacleActualX, drawY, obstacleWidth , obstacleHeight);
 }

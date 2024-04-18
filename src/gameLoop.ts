@@ -7,8 +7,7 @@ import {ctx, canvas, drawCloud, drawGround, obstacleLogic,
         loadHistoricalPoints,
         activeShadows} from './index';
 
-
-const gameFrames = () => {
+const gameFrames = (): void => {
     if (!gameOver) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawGround(sprites.ground);
@@ -17,14 +16,14 @@ const gameFrames = () => {
         drawHistoricalPoints();
         obstacleLogic();
         jumpLogic();
-        const dinoPosture = dinosaurPosture();
+        const dinoPosture: string = dinosaurPosture();
         const sprite = sprites[dinoPosture];
         drawDinosaur(sprite);
-        return requestAnimationFrame(gameFrames);
+        requestAnimationFrame(gameFrames);
     }
 };
 
-export const newGame = () => {
+export const newGame = (): void => {
     setGameOver();
     resetObstacles();
     gameFrames();
@@ -32,7 +31,7 @@ export const newGame = () => {
     managePoints();
 }
 
-export const start = () => {
+export const start = (): void  => {
     activeShadows();
     requestAnimationFrame(gameFrames);
     dinosaurInterval();
@@ -42,6 +41,3 @@ export const start = () => {
     loadHistoricalPoints();
     managePoints();
 }
-
-
-

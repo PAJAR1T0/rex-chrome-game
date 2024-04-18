@@ -1,11 +1,8 @@
 import { configValues } from "./index";
 
-// Added type any to resolve the errors
-
-export let ctx: any;
-export let canvas: any;
-export let scale: any;
-export let chorsCanvas: any;
+export let ctx: CanvasRenderingContext2D;
+export let canvas: HTMLCanvasElement
+export let scale: number;
 export let app: HTMLDivElement;
 
 export const createPage = (): void => {
@@ -17,10 +14,9 @@ export const createPage = (): void => {
     canvas.width = Math.floor(configValues.canvasInitialWidth * scale);
     canvas.height = Math.floor(150 * scale);
     canvas.style.backgroundColor = 'transparent';
-    ctx = canvas.getContext('2d');
+    ctx = canvas.getContext('2d')!;
     ctx.scale(scale, scale);
     ctx.imageSmoothingEnabled = true;
     app.appendChild(canvas);
-    chorsCanvas = canvas.getBoundingClientRect();
 }
 

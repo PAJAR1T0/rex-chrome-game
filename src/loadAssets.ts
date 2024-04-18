@@ -3,17 +3,17 @@ import gameOver from '../assets/gameOver.mp3'
 import level from '../assets/level.mp3'
 import spriteImage from '../assets/sprite.png'
 
-export const sprite = new Image();
-export const jumpSound = new Audio();
-export const gameOverSound = new Audio();
-export const levelSound = new Audio();
+export const sprite: HTMLImageElement = new Image();
+export const jumpSound: HTMLAudioElement = new Audio();
+export const gameOverSound: HTMLAudioElement = new Audio();
+export const levelSound: HTMLAudioElement = new Audio();
 
-const loadImage = async() => {
+const loadImage = async(): Promise<void> => {
     sprite.src = spriteImage;
     await sprite.decode()
 };
 
-const loadSounds = async() => {
+const loadSounds = async(): Promise<void> => {
     jumpSound.src = jump;
     gameOverSound.src = gameOver;
     levelSound.src = level;
@@ -22,7 +22,7 @@ const loadSounds = async() => {
     await levelSound.load();
 }
 
-export const loadAssets = async()=> {
+export const loadAssets = async(): Promise<void> => {
     await loadImage();
     await loadSounds();
 }

@@ -1,20 +1,20 @@
-import { ctx, configValues, gameOver, levelSound,} from './index';
+import { ctx, configValues, gameOver, levelSound } from './index';
 
-export let groundVelocity = configValues.initialVelocity;
+export let groundVelocity: number = configValues.initialVelocity;
 
-export let points = 0;
-let historicalPoints: any = 0;
+export let points: number = 0;
+let historicalPoints: string = '0';
 let drawPoints: string;
 let hasNewRecord: boolean = false;
 let isBlinking: boolean = false;
 let blinkCounter: number = 0;
 
 
-export const resetGroundVelocity = () => {
+export const resetGroundVelocity = (): void => {
     groundVelocity = configValues.initialVelocity;
 };
 
-export const gameOverPointsLogic = () => {
+export const gameOverPointsLogic = (): void => {
     if (hasNewRecord) {
         ctx.font = '25px Pixelify Sans';
         ctx.fillStyle = 'gray';
@@ -25,11 +25,11 @@ export const gameOverPointsLogic = () => {
     points = 0;
 }
 
-export const loadHistoricalPoints = () => {
-    historicalPoints = localStorage.getItem('record');
+export const loadHistoricalPoints = (): void => {
+    historicalPoints = localStorage.getItem('record')!;
 }
 
-export const managePoints = () => {
+export const managePoints = (): void => {
     setTimeout(() => {
         points++;
         if ( points % 100 === 0 ) { blinkPoints(), levelSound.play() };
@@ -58,10 +58,10 @@ export const drawActualPoints = () => {
 };
 
 export const drawHistoricalPoints = () => {
-    if (points > historicalPoints * 1) {
+    if (points > Number(historicalPoints) * 1) {
         historicalPoints = drawPoints;
         hasNewRecord = true;
     }
-    historicalPoints = (points > historicalPoints * 1) ? drawPoints : historicalPoints;
+    historicalPoints = (points > Number(historicalPoints) * 1) ? drawPoints : historicalPoints;
     ctx.fillText(historicalPoints, 470, + 25);
 };

@@ -1,9 +1,9 @@
-import { start, jump, gameOver, setGameOver, newGame, canvas, chorsCanvas, jumpSound } from "./index";
+import { start, jump, gameOver, setGameOver, newGame, canvas, jumpSound, newGameButtonInterface } from "./index";
 
-let gameStarted = false;
-export let duck = false;
+let gameStarted: boolean = false;
+export let duck: boolean = false;
 
-export const eventListeners = () => {
+export const eventListeners = (): void => {
     window.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowUp') {
             if (gameOver) {
@@ -31,10 +31,13 @@ export const eventListeners = () => {
 
 };
 
-export const newGameButton = (buttonX: number, buttonY: number, buttonWidth: number, buttonHeight: number) => {
+export const newGameButton: newGameButtonInterface = (buttonX, buttonY, buttonWidth, buttonHeight) => {
     canvas.addEventListener('click', (event: MouseEvent) => {
+        let chorsCanvas = canvas.getBoundingClientRect();
         let x = event.clientX - chorsCanvas.x;
         let y = event.clientY - chorsCanvas.y;
+        console.log(chorsCanvas.x, chorsCanvas.y)
+        console.log(x, y, buttonX, buttonY, buttonWidth, buttonHeight, gameOver)
         if ( x > buttonX && x < buttonX + buttonWidth && y > buttonY && y < buttonY + buttonHeight && gameOver) {
             setGameOver();
             newGame();
