@@ -9,7 +9,7 @@ export { groundVelocity, points, resetGroundVelocity, gameOverPointsLogic, loadH
 export { sprites } from '../env/sprites';
 export { drawGround, drawCloud } from './background';
 export { obstacleLogic, birdPosture, resetObstacles } from './obstacles';
-export { expandCanvas, activeShadows } from './changeCanvasSize';
+export { expandCanvas, activeShadows, isExpanded } from './changeCanvasSize';
 export { drawActualPoints, drawHistoricalPoints, managePoints } from './points';
 export { checkColition } from './colition';
 export { gameOverLogic, setGameOver, gameOver } from './gameOver';

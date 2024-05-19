@@ -5,7 +5,11 @@ import {ctx, canvas, drawCloud, drawGround, obstacleLogic,
         resetObstacles,
         resetGroundVelocity, sprites,
         loadHistoricalPoints,
-        activeShadows} from './index';
+        activeShadows,
+        isExpanded} from './index';
+
+let interval: number; 
+let inGameLoop: boolean = false;
 
 const gameFrames = (): void => {
     if (!gameOver) {
@@ -19,9 +23,24 @@ const gameFrames = (): void => {
         const dinoPosture: string = dinosaurPosture();
         const sprite = sprites[dinoPosture];
         drawDinosaur(sprite);
-        requestAnimationFrame(gameFrames);
+        if (!isExpanded) {
+            requestAnimationFrame(gameFrames);
+            return;
+        }
+        if (!inGameLoop) gameLoop();
+        return;
     }
+    clearInterval(interval);
+    inGameLoop = false;
 };
+
+const gameLoop = () => {
+    inGameLoop = true;
+    interval = setInterval(() => {
+        gameFrames()
+    }, 1000/60)
+}
+
 
 export const newGame = (): void => {
     setGameOver();
@@ -33,11 +52,11 @@ export const newGame = (): void => {
 
 export const start = (): void  => {
     activeShadows();
-    requestAnimationFrame(gameFrames);
+    expandCanvas();
+    gameFrames();
     dinosaurInterval();
     jump()
     birdPosture()
-    expandCanvas();
     loadHistoricalPoints();
     managePoints();
 }

@@ -36,7 +36,7 @@ export const jumpLogic = (): void =>  {
 }
 
 
-export const jump =(): void => {    
+export const jump = (): void => {    
     if (!isJumping) {
         isJumping = true;
         isUpping = true;

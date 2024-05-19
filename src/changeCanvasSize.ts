@@ -1,12 +1,14 @@
 import { configValues, ctx, canvas, scale, app } from "./index";
 
 let canvasWidth: number = configValues.canvasInitialWidth;
+export let isExpanded: boolean = false;
 
 export const expandCanvas = (): void => {
     setTimeout(() => { 
         canvasWidth += 4;
         updateCanvasSize(canvasWidth);
         if (canvasWidth < configValues.canvasMaxWidth) return expandCanvas();
+        return isExpanded = true;
     }, 1);
 }
 
